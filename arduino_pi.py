@@ -11,6 +11,9 @@ UNO = 101
 LEONARDO = 102
 ADK = 103
 SER = serial.Serial('/dev/ttyAMA0', 115200)
+# Close the SER connection, so everything else works
+SER.close()
+
 
 class ArPiException(Exception):
     def __init__(self, value):
