@@ -23,8 +23,6 @@ class ArduinoPi:
     __arName = None
 
     def __init__(self, device):
-        # add serial stuff
-
         self.__setDevice(device)
 
     def __isBetween(self, num, range):
@@ -109,7 +107,6 @@ class ArduinoPi:
         @return: bool
         @raise: ArPiException
         """
-        print "oke for now"
         if(self.__isBetween(port, self.__arduino["DIGITAL"])):
             if(value == HIGH or value == LOW):
                 cmd = "@" + str(port) + "," + str(value) + ":"
@@ -126,6 +123,13 @@ class ArduinoPi:
             raise ArPiException("writeDigital: Wrong port value")
 
     def readAnalog(self, port):
+        """
+        Reads an analog port.
+        @cmd: @102,<port>:
+        @param port: The port value
+        @return val: The analog value
+        @raise: ArPiException
+        """
         if(self.__isBetween(port, self.__arduino["ANALOG"])):
             cmd = "@102," + str(port) + ":"
             SER.open()
@@ -143,11 +147,11 @@ class ArduinoPi:
 
     def writeMultiplePWM(self, port, value):
         """
-        Write multiple ports at the same time (no serial transfer delay)
+        Write multiple ports pwm at the same time (no serial transfer delay)
         @cmd @101,<#port>,<port1>,<value1>,<port2>,<value2>,...:
 
         @param port: The port values in an array
-        @param value: The value can be a array or one value for all the ports
+        @param value: The value can be a array
         @return: bool
         @raise: ArPiException
         """
@@ -168,6 +172,15 @@ class ArduinoPi:
             raise ArPiException("Wrong combination of port and value (should be array)")
 
     def writeMultipleDigital(self, port, value):
+        """
+        Write multiple ports digital at the same time (no serial transfer delay)
+        @cmd @101,<#port>,<port1>,<value1>,<port2>,<value2>,...:
+
+        @param port: The port values in an array
+        @param value: The value can be a array
+        @return: bool
+        @raise: ArPiException
+        """
         if(isinstance(port, list) and isinstance(value, list) and (len(port) == len(value))):
             cmd = "@101," + str(len(port))
             for i in range(len(port)):
